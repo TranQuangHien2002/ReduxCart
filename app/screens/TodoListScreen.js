@@ -6,12 +6,14 @@ import {
   fetchTodosAsync,
   addTodoAsync,
   removeTodoAsync,
-  updateTodoAsync,
 } from '../reducers/todoReducer';
+
+import { useNavigation } from '@react-navigation/native';
 
 const TodoListScreen = () => {
   const dispatch = useDispatch();
   const todos = useSelector(state => state.todos);
+  const navigation = useNavigation();
 
   useEffect(() => {
     // Fetch todos from the API and dispatch setTodos action
@@ -19,12 +21,8 @@ const TodoListScreen = () => {
   }, []);
 
   const handleAddTodo = () => {
-    // Implement logic to add a new todo
-    const newTodo = {
-      id: Date.now().toString(),
-      todojob: 'New Todo',
-    };
-    dispatch(addTodoAsync(newTodo));
+    // Navigate to the AddJobScreen for adding a new job
+    navigation.navigate('AddJob');
   };
 
   const handleRemoveTodo = (id) => {
@@ -32,9 +30,9 @@ const TodoListScreen = () => {
     dispatch(removeTodoAsync(id));
   };
 
-  const handleUpdateTodo = (id, updatedTodo) => {
-    // Implement logic to update a todo
-    dispatch(updateTodoAsync(id, updatedTodo));
+  const handleUpdateTodo = (todo) => {
+    // Navigate to the AddJobScreen for updating a job
+    navigation.navigate('AddJob', { todo });
   };
 
   return (
@@ -44,7 +42,7 @@ const TodoListScreen = () => {
         <View key={todo.id}>
           <Text>{todo.todojob}</Text>
           <Button title="Remove" onPress={() => handleRemoveTodo(todo.id)} />
-          <Button title="Update" onPress={() => handleUpdateTodo(todo.id, { todojob: 'Updated Todo' })} />
+          <Button title="Update" onPress={() => handleUpdateTodo(todo)} />
         </View>
       ))}
       <Button title="Add Todo" onPress={handleAddTodo} />
